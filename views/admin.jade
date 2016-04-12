@@ -1,0 +1,48 @@
+extends layout
+
+block content
+    // Navigation
+    nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
+        .container
+            // Brand and toggle get grouped for better mobile display
+            .navbar-header
+                button.navbar-toggle(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+                    span.sr-only Toggle navigation
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                //a.navbar-brand(href='#') Start Bootstrap
+            // Collect the nav links, forms, and other content for toggling
+            #bs-example-navbar-collapse-1.collapse.navbar-collapse
+                ul.nav.navbar-nav
+                    li
+                        a(href='/logout') Logout
+                    li
+                        a(href='/adduser') Add User
+            // /.navbar-collapse
+        // /.container
+    // Page Content
+    .container
+        .row
+            .col-lg-12.text-center
+                h1 This is the Admin Page
+                p.lead Welcome to the page for admin roles
+                p.lead You are #{userObj.username} and have the role #{userObj.role}
+
+
+        // /.row
+    // /.container
+    // jQuery Version 1.11.1
+    script(src='/javascripts/jquery.js')
+    // Bootstrap Core JavaScript
+    script(src='/javascripts/bootstrap.min.js')
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,77 @@
+/**
+ * Created by simon on 3/31/16.
+ */
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var bcrypt = require('bcrypt');
+
+var url = '127.0.0.1:27017/' + process.env.OPENSHIFT_APP_NAME;
+
+// if OPENSHIFT env variables are present, use the available connection info:
+if (process.env.OPENSHIFT_MONGODB_DB_URL) {
+    url = process.env.OPENSHIFT_MONGODB_DB_URL +
+        process.env.OPENSHIFT_APP_NAME;
+}
+
+// Connect to mongodb
+var connect = function () {
+    mongoose.connect(url);
+};
+connect();
+
+var db = mongoose.connection;
+
+var UserSchema = new Schema({
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        required: true
+    }
+});
+
+UserSchema.pre('save', function (next) {
+    var user = this;
+    if (this.isModified('password') || this.isNew) {
+        bcrypt.genSalt(10, function (err, salt) {
+            if (err) {
+                return next(err);
+            }
+            bcrypt.hash(user.password, salt, function (err, hash) {
+                if (err) {
+                    return next(err);
+                }
+                user.password = hash;
+                next();
+            });
+        });
+    } else {
+        return next();
+    }
+});
+
+UserSchema.methods.comparePassword = function (passw, cb) {
+    bcrypt.compare(passw, this.password, function (err, isMatch) {
+        if (err) {
+            return cb(err);
+        }
+        cb(null, isMatch);
+    });
+};
+
+
+/*
+ deleteUser: function(username) {},
+ updateUser: function(username, userObj) {},
+ getUser: function(username) {}
+ */
+
+module.exports = mongoose.model('seedUsers', UserSchema);
+

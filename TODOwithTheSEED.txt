@@ -1,0 +1,9 @@
+seed noter:
+
+TODO: add admin CRUD operations via client (only server based right now)
+
+TODO: add ANGULAR client part - right now it is all running on the server
+
+TODO: role should be a drop down list of 2 options
+
+In 5 minutes: Look at passport and JWT and make it work with my current project :)
